@@ -1,0 +1,10 @@
+# Maven and IntelliJ IDEA build output
+target/
+out/
+
+# Local IDE settings
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
