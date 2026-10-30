@@ -1,0 +1,9 @@
+.upstream/
+.env
+artifacts/
+.local/
+**/bin/
+**/obj/
+.idea/
+.vs/
+*.user

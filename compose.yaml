@@ -1,0 +1,66 @@
+name: kt4-eshop
+
+x-application: &application
+  ASPNETCORE_ENVIRONMENT: Docker
+  ASPNETCORE_URLS: http://+:8080
+  UseOnlyInMemoryDatabase: "false"
+  ConnectionStrings__CatalogConnection: "Server=database;Database=KT4Catalog;User Id=sa;Password=${SQL_PASSWORD:?Run Prepare-Environment.ps1};TrustServerCertificate=true"
+  ConnectionStrings__IdentityConnection: "Server=database;Database=KT4Identity;User Id=sa;Password=${SQL_PASSWORD};TrustServerCertificate=true"
+  Logging__LogLevel__Default: Warning
+  Logging__LogLevel__Microsoft: Warning
+
+services:
+  database:
+    image: ${SQL_IMAGE:?Run Prepare-Environment.ps1}
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${SQL_PASSWORD}
+    volumes:
+      - database:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  api:
+    image: kt4-eshop-api:local
+    build:
+      context: .
+      target: api
+      args:
+        SDK_IMAGE: ${SDK_IMAGE}
+        RUNTIME_IMAGE: ${RUNTIME_IMAGE}
+    environment:
+      <<: *application
+      baseUrls__apiBase: http://api:8080/api/
+      baseUrls__webBase: http://localhost:18301/
+    ports:
+      - "127.0.0.1:18302:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  web:
+    image: kt4-eshop-web:local
+    build:
+      context: .
+      target: web
+      args:
+        SDK_IMAGE: ${SDK_IMAGE}
+        RUNTIME_IMAGE: ${RUNTIME_IMAGE}
+    environment:
+      <<: *application
+      ASPNETCORE_URLS: http://+:18301
+      baseUrls__apiBase: http://api:8080/api/
+      baseUrls__webBase: http://web:18301/
+    ports:
+      - "127.0.0.1:18301:18301"
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  database:

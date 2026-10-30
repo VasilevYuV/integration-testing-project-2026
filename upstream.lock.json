@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/dotnet-architecture/eShopOnWeb.git",
+  "commit": "4da8212117e87d808d4bbc7da6286fd2147ce606",
+  "images": {
+    "sdk": "mcr.microsoft.com/dotnet/sdk@sha256:6ba9644da07bb5b560a402acec9ca38711a0762969f1b61da261df5c9f6f85da",
+    "runtime": "mcr.microsoft.com/dotnet/aspnet@sha256:ea721098d6ea2894ff9bd8387821a1659d4765d6c014b8d648bb1da16f016f5a",
+    "sql": "mcr.microsoft.com/mssql/server@sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718"
+  }
+}

@@ -1,0 +1,7 @@
+.git
+.env
+.local
+artifacts
+.upstream/.git
+**/bin
+**/obj
