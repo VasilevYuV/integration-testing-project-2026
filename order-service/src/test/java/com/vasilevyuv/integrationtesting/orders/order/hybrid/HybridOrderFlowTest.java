@@ -115,6 +115,21 @@ class HybridOrderFlowTest {
         assertThat(USERS.requests()).isEmpty();
     }
 
+    @Test
+    @DisplayName("CI-01 Blank product neither calls users nor changes existing data")
+    void rejectsBlankProductWithoutSideEffects() throws Exception {
+        seedOrder(MINIMUM);
+        USERS.respond(200, MAXIMUM.userJson());
+        var request = """
+                {"userId":"%s","product":"   ","quantity":1,"unitPrice":10.00}
+                """.formatted(MAXIMUM.userId());
+
+        assertProblem(post(request), 400, "INVALID_REQUEST");
+
+        assertOnlySeedRemains();
+        assertThat(USERS.requests()).isEmpty();
+    }
+
     @ParameterizedTest(name = "HY-J04 [{index}] users {0} becomes orders {1}; stored data is unchanged")
     @CsvSource({"404, 422, USER_NOT_FOUND", "500, 503, USER_SERVICE_UNAVAILABLE"})
     void rejectsDependencyFailuresWithoutSideEffects(int upstreamStatus, int apiStatus, String code) throws Exception {
