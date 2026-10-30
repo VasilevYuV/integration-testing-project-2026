@@ -1,0 +1,8 @@
+ARG SDK_IMAGE
+FROM ${SDK_IMAGE}
+WORKDIR /tests
+COPY tests/BigBangTests/BigBangTests.csproj ./
+RUN dotnet restore
+COPY tests/BigBangTests/ ./
+RUN dotnet build --no-restore -c Release
+CMD ["dotnet", "test", "--no-build", "-c", "Release", "--logger", "trx;LogFileName=big-bang.trx", "--logger", "console;verbosity=normal", "--results-directory", "/results"]

@@ -1,0 +1,18 @@
+# Runs in a unique Compose project with a fresh database and no published ports.
+services:
+  web:
+    ports: !reset []
+  api:
+    ports: !reset []
+  tests:
+    image: kt4-eshop-tests:local
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+      args:
+        SDK_IMAGE: ${SDK_IMAGE}
+    environment:
+      WEB_URL: http://web:18301/
+      API_URL: http://api:8080/
+    volumes:
+      - ${TEST_RESULTS_DIR:?Run Run-BigBangTests.ps1}:/results
