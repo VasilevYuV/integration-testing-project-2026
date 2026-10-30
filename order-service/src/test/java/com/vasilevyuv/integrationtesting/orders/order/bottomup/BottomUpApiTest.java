@@ -1,5 +1,7 @@
 package com.vasilevyuv.integrationtesting.orders.order.bottomup;
 
+import com.vasilevyuv.integrationtesting.orders.order.support.UserApiStub;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

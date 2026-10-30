@@ -1,5 +1,8 @@
 package com.vasilevyuv.integrationtesting.orders.order.bottomup;
 
+import com.vasilevyuv.integrationtesting.orders.order.support.OrderDatabase;
+import com.vasilevyuv.integrationtesting.orders.order.support.UserApiStub;
+
 import com.vasilevyuv.integrationtesting.orders.order.domain.Order;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
